@@ -1,14 +1,17 @@
 import React, { memo } from 'react'
+import { renderRoutes } from 'react-router-config';
+import routes from './routes'
+import { HashRouter } from 'react-router-dom'
 
 import { IconStyle } from './assets/iconfont/iconfont';
 import { GlobalStyle } from './style'
 
 export default memo(function App() {
   return (
-    <div>
+    <HashRouter>
       <GlobalStyle></GlobalStyle>
       <IconStyle></IconStyle>
-      <i className="iconfont">&#xe62b;</i>
-    </div>
+      {renderRoutes(routes)}
+    </HashRouter>
   )
 })
