@@ -21,8 +21,14 @@ export default React.memo(function Recommend() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getBannerList())
-    dispatch(getRecommendList())
+    // 如果页面有数据，则不发请求
+    //immutable 数据结构中长度属性 size
+    if(!bannerList.size) {
+      dispatch(getBannerList())
+    }
+    if(!recommendList.size) {
+      dispatch(getRecommendList())
+    }
   }, [dispatch])
 
   const bannerListJS = bannerList ? bannerList.toJS() : []
