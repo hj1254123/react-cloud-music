@@ -1,18 +1,21 @@
 import React, { useEffect } from 'react';
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
-import {getBannerList, getRecommendList} from './store/actionCreators';
+import { getBannerList, getRecommendList } from './store/actionCreators';
 import { forceCheck } from 'react-lazyload';
 
 
 import Slider from '../../components/slider/';
 import RecommendList from '../../components/list/';
 import Scroll from '../../baseUI/scroll/index';
+import Loading from '../../baseUI/loading/index';
+
 import { Content } from './style';
 
 export default React.memo(function Recommend() {
-  const { bannerList, recommendList } = useSelector(state => ({
+  const { bannerList, recommendList, enterLoading } = useSelector(state => ({
     bannerList: state.getIn(['recommend', 'bannerList']),
-    recommendList: state.getIn(['recommend', 'recommendList'])
+    recommendList: state.getIn(['recommend', 'recommendList']),
+    enterLoading: state.getIn(['recommend', 'enterLoading']),
   }), shallowEqual)
 
   const dispatch = useDispatch()
@@ -33,6 +36,7 @@ export default React.memo(function Recommend() {
           <RecommendList recommendList={recommendListJS}></RecommendList>
         </div>
       </Scroll>
+      {enterLoading ? <Loading></Loading> : null}
     </Content>
   );
 })
