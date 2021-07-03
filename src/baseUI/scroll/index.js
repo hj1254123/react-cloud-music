@@ -19,7 +19,7 @@ const Scroll = forwardRef((props, ref) => {
 
   useEffect(() => {
     const scroll = new BScroll(scrollContaninerRef.current, {
-      scrollX: direction === "horizontal",
+      scrollX: direction === "horizental",
       scrollY: direction === "vertical",
       probeType: 3,
       click: click,
@@ -114,7 +114,7 @@ Scroll.defaultProps = {
 };
 
 Scroll.propTypes = {
-  direction: PropTypes.oneOf(['vertical', 'horizontal']),
+  direction: PropTypes.oneOf(['vertical', 'horizental']),
   refresh: PropTypes.bool,
   onScroll: PropTypes.func,
   pullUp: PropTypes.func,
