@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import {getBannerList, getRecommendList} from './store/actionCreators';
+import { forceCheck } from 'react-lazyload';
 
 
 import Slider from '../../components/slider/';
@@ -26,7 +27,7 @@ export default React.memo(function Recommend() {
 
   return (
     <Content>
-      <Scroll>
+      <Scroll classNmae='list' onScroll={forceCheck}>
         <div>
           <Slider bannerList={bannerListJS}></Slider>
           <RecommendList recommendList={recommendListJS}></RecommendList>
