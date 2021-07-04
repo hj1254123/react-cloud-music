@@ -13,7 +13,6 @@ export const getHotSingerListRequest = (count) => {
 }
 
 export const getSingerListRequest= (category, alpha, count) => {
-  console.log(category, alpha);
   let newCategory = category.split('|')
   // 1男 2女
   let type = newCategory[0]

@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useEffect, useRef, useImperativeHandle } from "react"
+import React, { forwardRef, useState, useEffect, useRef, useImperativeHandle, useMemo } from "react"
 import PropTypes from "prop-types"
 import BScroll from "better-scroll"
 import styled from 'styled-components';
@@ -67,31 +67,42 @@ const Scroll = forwardRef((props, ref) => {
     }
   }, [onScroll, bScroll]);
 
+  // 千万注意，这里不能省略依赖，
+  // 不然拿到的始终是第一次 pullUp 函数的引用，相应的闭包作用域变量都是第一次的，产生闭包陷阱。下同。
+ 
+  let pullUpDebounce = useMemo (() => {
+    return debounce (pullUp, 300)
+  }, [pullUp]);
+ 
+  let pullDownDebounce = useMemo (() => {
+    return debounce (pullDown, 300)
+  }, [pullDown]);
+
   useEffect(() => {
     if(!bScroll || !pullUp) return;
     bScroll.on('scrollEnd', () => {
       //判断是否滑动到了底部
       if(bScroll.y <= bScroll.maxScrollY + 100) {
-        pullUp();
+        pullUpDebounce();
       }
     });
     return () => {
       bScroll.off('scrollEnd');
     }
-  }, [pullUp, bScroll]);
+  }, [pullUp, pullUpDebounce, bScroll]);
 
   useEffect(() => {
     if(!bScroll || !pullDown) return;
     bScroll.on('touchEnd', (pos) => {
       //判断用户的下拉动作
       if(pos.y > 50) {
-        pullDown();
+        pullDownDebounce();
       }
     });
     return () => {
       bScroll.off('touchEnd');
     }
-  }, [pullDown, bScroll]);
+  }, [pullDown, pullDownDebounce, bScroll]);
 
 
   useEffect(() => {
