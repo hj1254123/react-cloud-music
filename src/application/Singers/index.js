@@ -1,7 +1,6 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useContext } from 'react';
 import { shallowEqual, useSelector, useDispatch } from 'react-redux';
 import LazyLoad, { forceCheck } from 'react-lazyload';
-
 
 import { categoryTypes, alphaTypes } from '../../api/config';
 import {
@@ -14,11 +13,11 @@ import {
   changePullDownLoading,
   refreshMoreHotSingerList
 } from './store/actionCreators';
+import { CategoryDataContext, CHANGE_ALPHA, CHANGE_CATEGORY } from './data';
 
 import Horizen from '../../baseUI/horizen-item';
 import Scroll from './../../baseUI/scroll/index';
 import Loading from '../../baseUI/loading';
-
 import {
   NavContainer,
   ListContainer,
@@ -27,9 +26,12 @@ import {
 } from "./style";
 
 function Singers() {
-  let [category, setCategory] = useState('');
-  let [alpha, setAlpha] = useState('');
 
+  const categoryContext = useContext(CategoryDataContext);
+  const data = categoryContext.data
+  const contextDispatch = categoryContext.dispatch
+  // 拿到 category 和 alpha 的值
+  const { category, alpha } = data.toJS();
   const {
     singerList,
     enterLoading,
@@ -47,7 +49,9 @@ function Singers() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getHotSingerList())
+    if (!singerList.size) {
+      dispatch(getHotSingerList())
+    }
   }, [])
 
   const updateDispatch = (category, alpha) => {
@@ -78,7 +82,8 @@ function Singers() {
   // 这里需要使用 useCallback 防止和 Horizen 无关的数据改变造成其 render。
   let handleUpdateAlpha = useCallback(
     (val) => {
-      setAlpha(val);
+      // setAlpha(val);
+      contextDispatch({ type: CHANGE_ALPHA, data: val })
       updateDispatch(category, val);
     },
     [category]
@@ -86,7 +91,7 @@ function Singers() {
 
   let handleUpdateCatetory = useCallback(
     (val) => {
-      setCategory(val);
+      contextDispatch({ type: CHANGE_CATEGORY, data: val })
       updateDispatch(val, alpha);
     },
     [alpha]

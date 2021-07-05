@@ -8,6 +8,7 @@ import store from './store/index'
 
 import { IconStyle } from './assets/iconfont/iconfont';
 import { GlobalStyle } from './style'
+import { Data } from './application/Singers/data';
 
 export default memo(function App() {
   return (
@@ -15,7 +16,9 @@ export default memo(function App() {
       <HashRouter>
         <GlobalStyle></GlobalStyle>
         <IconStyle></IconStyle>
-        {renderRoutes(routes)}
+        <Data>
+          {renderRoutes(routes)}
+        </Data>
       </HashRouter>
     </Provider>
 
