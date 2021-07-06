@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import { getBannerList, getRecommendList } from './store/actionCreators';
 import { forceCheck } from 'react-lazyload';
+import { renderRoutes } from 'react-router-config';
 
 
 import Slider from '../../components/slider/';
@@ -11,7 +12,7 @@ import Loading from '../../baseUI/loading/index';
 
 import { Content } from './style';
 
-export default React.memo(function Recommend() {
+export default React.memo(function Recommend(props) {
   const { bannerList, recommendList, enterLoading } = useSelector(state => ({
     bannerList: state.getIn(['recommend', 'bannerList']),
     recommendList: state.getIn(['recommend', 'recommendList']),
@@ -43,6 +44,7 @@ export default React.memo(function Recommend() {
         </div>
       </Scroll>
       {enterLoading ? <Loading></Loading> : null}
+      {renderRoutes(props.route.routes)}
     </Content>
   );
 })
