@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react';
 import { shallowEqual, useSelector, useDispatch } from 'react-redux';
 import LazyLoad, { forceCheck } from 'react-lazyload';
+import { renderRoutes } from 'react-router-config';
 
 import { categoryTypes, alphaTypes } from '../../api/config';
 import {
@@ -25,7 +26,7 @@ import {
   ListItem
 } from "./style";
 
-function Singers() {
+function Singers(props) {
 
   const categoryContext = useContext(CategoryDataContext);
   const data = categoryContext.data
@@ -105,6 +106,9 @@ function Singers() {
     pullDownRefreshDispatch(category, alpha);
   };
 
+  const enterDetail = (id)  => {
+    props.history.push (`/singers/${id}`);
+  };
   // 渲染函数，返回歌手列表
   const renderSingerList = () => {
     const list = singerList ? singerList.toJS() : [];
@@ -114,7 +118,7 @@ function Singers() {
         {
           list.map((item, index) => {
             return (
-              <ListItem key={item.accountId + "" + index}>
+              <ListItem key={item.accountId + "" + index} onClick={() => enterDetail (item.id)}>
                 <div className="img_wrapper">
                   <LazyLoad placeholder={<img width="100%" height="100%" src={require('./singer.png').default} alt="music" />}>
                     <img src={`${item.picUrl}?param=300x300`} width="100%" height="100%" alt="music" />
@@ -146,6 +150,7 @@ function Singers() {
         </Scroll>
         {enterLoading ? <Loading></Loading> : null}
       </ListContainer>
+      { renderRoutes(props.route.routes) }
     </div>
   )
 }
